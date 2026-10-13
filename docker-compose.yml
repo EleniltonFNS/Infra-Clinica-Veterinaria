@@ -1,0 +1,38 @@
+name: clinica-pata-amiga
+
+services:
+  firewall:
+    build: ./firewall
+    init: true
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    command: ["tail", "-f", "/dev/null"] # Mantém o container em execução após o entrypoint.sh carregar as regras de firewall
+    networks:
+      lan:
+        ipv4_address: ${FIREWALL_LAN_IP}
+      dmz:
+        ipv4_address: ${FIREWALL_DMZ_IP}
+      external:
+        ipv4_address: ${FIREWALL_EXTERNAL_IP}
+
+networks:
+  lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${LAN_SUBNET}
+
+  dmz:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${DMZ_SUBNET}
+
+  external:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${EXTERNAL_SUBNET}  
+      
