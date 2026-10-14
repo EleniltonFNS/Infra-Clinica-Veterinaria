@@ -57,6 +57,23 @@ services:
       dmz:
         ipv4_address: ${PRONTUARIO_IP}
 
+  dmz-db:
+    image: postgres:16-alpine
+    init: true
+    cap_add:
+      - NET_ADMIN # Permite gerenciar rotas de rede para apontar o gateway
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      FIREWALL_DMZ_IP: ${FIREWALL_DMZ_IP}
+    volumes:
+      - dbdata:/var/lib/postgresql/data # Volume nomeado para persistência dos dados
+      - ./dmz-db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro # Script de inicialização das tabelas
+    networks:
+      dmz:
+        ipv4_address: ${DB_IP}
+
 networks:
   lan:
     driver: bridge
@@ -74,5 +91,8 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: ${EXTERNAL_SUBNET}  
+        - subnet: ${EXTERNAL_SUBNET}
+
+volumes:
+  dbdata: # Volume persistente do banco de dados PostgreSQL
       
