@@ -8,12 +8,21 @@ services:
       - NET_ADMIN
     sysctls:
       net.ipv4.ip_forward: "1"
+
+    environment: # Disponibiliza no container as variáveis definidas no arquivo .env
+      LAN_SUBNET: ${LAN_SUBNET}
+      DMZ_SUBNET: ${DMZ_SUBNET}
+      EXTERNAL_SUBNET: ${EXTERNAL_SUBNET}
+      FIREWALL_LAN_IP: ${FIREWALL_LAN_IP}
+      FIREWALL_DMZ_IP: ${FIREWALL_DMZ_IP}
+      FIREWALL_EXTERNAL_IP: ${FIREWALL_EXTERNAL_IP}
+
     command: ["tail", "-f", "/dev/null"] # Mantém o container em execução após o entrypoint.sh carregar as regras de firewall
     networks:
       lan:
         ipv4_address: ${FIREWALL_LAN_IP}
       dmz:
-        ipv4_address: ${FIREWALL_DMZ_IP}
+        ipv4_address: ${FIREWALL_DMZ_IP}    
       external:
         ipv4_address: ${FIREWALL_EXTERNAL_IP}
 

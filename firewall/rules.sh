@@ -23,4 +23,6 @@ iptables -A OUTPUT -o lo -j ACCEPT # Permite que os pacotes gerados pelo firewal
 
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT # Permite que os pacotes que chegam ao firewall sejam aceitos se fizerem parte de uma conexão já estabelecida ou estiverem relacionados a uma conexão existente.
 iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT # Permite que os pacotes gerados pelo firewall sejam aceitos se fizerem parte de uma conexão já estabelecida ou estiverem relacionados a uma conexão existente.
+iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT # Permite que os pacotes que chegam à chain FORWARD sejam aceitos se fizerem parte de uma conexão já estabelecida ou estiverem relacionados a uma conexão existente.
 
+iptables -A FORWARD -s "$LAN_SUBNET" -d "$DMZ_SUBNET" -p tcp --dport 80 -j ACCEPT # Permite que os pacotes encaminhados da rede LAN para a rede DMZ sejam aceitos quando utilizarem o protocolo TCP e tiverem como destino a porta 80.
