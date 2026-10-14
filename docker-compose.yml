@@ -20,6 +20,10 @@ services:
       TUTOR_IP: ${TUTOR_IP}
       WEB_IP: ${WEB_IP}
       PRONTUARIO_IP: ${PRONTUARIO_IP}
+      DB_IP: ${DB_IP}
+
+    volumes:
+      - ./firewall/rules.sh:/usr/local/sbin/rules.sh:ro # Permite editar regras no host sem precisar reconstruir a imagem
 
     command: ["tail", "-f", "/dev/null"] # Mantém o container em execução após o entrypoint.sh carregar as regras de firewall
     networks:
