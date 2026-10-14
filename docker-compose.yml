@@ -62,6 +62,10 @@ services:
     init: true
     cap_add:
       - NET_ADMIN # Permite gerenciar rotas de rede para apontar o gateway
+    entrypoint: # Configura rota default para o firewall e inicia o processo do PostgreSQL
+      - /bin/sh
+      - -c
+      - ip route replace default via "$$FIREWALL_DMZ_IP" && exec docker-entrypoint.sh postgres
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -117,18 +121,24 @@ services:
 networks:
   lan:
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.gateway_mode_ipv4: routed
     ipam:
       config:
         - subnet: ${LAN_SUBNET}
 
   dmz:
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.gateway_mode_ipv4: routed
     ipam:
       config:
         - subnet: ${DMZ_SUBNET}
 
   external:
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.gateway_mode_ipv4: routed
     ipam:
       config:
         - subnet: ${EXTERNAL_SUBNET}

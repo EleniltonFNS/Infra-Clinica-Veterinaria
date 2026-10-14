@@ -5,5 +5,9 @@ FROM alpine:3.22
 # curl (requisições HTTP/HTTPS), nmap (varredura de portas), iproute2 (tabela de rotas) e iputils (ping).
 RUN apk add --no-cache curl nmap iproute2 iputils
 
-# Mantém o contêiner em execução aguardando comandos
-CMD ["tail", "-f", "/dev/null"]
+# Copia e configura o script de inicialização para definir a rota default apontando para o firewall
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Define o entrypoint responsável por ajustar o gateway na subida do contêiner
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
