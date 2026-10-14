@@ -44,6 +44,19 @@ services:
       dmz:
         ipv4_address: ${WEB_IP}
 
+  dmz-prontuario:
+    build: ./dmz-web # Reutiliza a imagem base do Nginx da DMZ
+    init: true
+    cap_add:
+      - NET_ADMIN # Permite gerenciar rotas de rede para apontar o gateway
+    environment:
+      FIREWALL_DMZ_IP: ${FIREWALL_DMZ_IP}
+    volumes:
+      - ./dmz-prontuario/nginx.conf:/etc/nginx/conf.d/default.conf:ro # Sobrescreve a configuração do site pela da API
+    networks:
+      dmz:
+        ipv4_address: ${PRONTUARIO_IP}
+
 networks:
   lan:
     driver: bridge
