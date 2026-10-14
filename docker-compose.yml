@@ -74,6 +74,46 @@ services:
       dmz:
         ipv4_address: ${DB_IP}
 
+  medico:
+    build: ./cliente
+    init: true
+    cap_add:
+      - NET_ADMIN # Permite gerenciar a tabela de rotas do container
+    environment:
+      PERFIL: medico
+      FIREWALL_LAN_IP: ${FIREWALL_LAN_IP}
+      TUTOR_IP: ${TUTOR_IP}
+      WEB_IP: ${WEB_IP}
+      PRONTUARIO_IP: ${PRONTUARIO_IP}
+      DB_IP: ${DB_IP}
+    extra_hosts:
+      dmz-web: ${WEB_IP}
+      dmz-prontuario: ${PRONTUARIO_IP}
+      dmz-db: ${DB_IP}
+    networks:
+      lan:
+        ipv4_address: ${MEDICO_IP}
+
+  tutor:
+    build: ./cliente
+    init: true
+    cap_add:
+      - NET_ADMIN # Permite gerenciar a tabela de rotas do container
+    environment:
+      PERFIL: tutor
+      FIREWALL_EXTERNAL_IP: ${FIREWALL_EXTERNAL_IP}
+      MEDICO_IP: ${MEDICO_IP}
+      WEB_IP: ${WEB_IP}
+      PRONTUARIO_IP: ${PRONTUARIO_IP}
+      DB_IP: ${DB_IP}
+    extra_hosts:
+      dmz-web: ${WEB_IP}
+      dmz-prontuario: ${PRONTUARIO_IP}
+      dmz-db: ${DB_IP}
+    networks:
+      external:
+        ipv4_address: ${TUTOR_IP}
+
 networks:
   lan:
     driver: bridge
