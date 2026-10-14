@@ -16,6 +16,10 @@ services:
       FIREWALL_LAN_IP: ${FIREWALL_LAN_IP}
       FIREWALL_DMZ_IP: ${FIREWALL_DMZ_IP}
       FIREWALL_EXTERNAL_IP: ${FIREWALL_EXTERNAL_IP}
+      MEDICO_IP: ${MEDICO_IP}
+      TUTOR_IP: ${TUTOR_IP}
+      WEB_IP: ${WEB_IP}
+      PRONTUARIO_IP: ${PRONTUARIO_IP}
 
     command: ["tail", "-f", "/dev/null"] # Mantém o container em execução após o entrypoint.sh carregar as regras de firewall
     networks:
