@@ -30,6 +30,20 @@ services:
       external:
         ipv4_address: ${FIREWALL_EXTERNAL_IP}
 
+  dmz-web:
+    build: ./dmz-web
+    init: true
+    cap_add:
+      - NET_ADMIN # Permite gerenciar rotas de rede para apontar o gateway
+    environment:
+      FIREWALL_DMZ_IP: ${FIREWALL_DMZ_IP}
+      MEDICO_IP: ${MEDICO_IP}
+      TUTOR_IP: ${TUTOR_IP}
+      DB_IP: ${DB_IP}
+    networks:
+      dmz:
+        ipv4_address: ${WEB_IP}
+
 networks:
   lan:
     driver: bridge
