@@ -40,6 +40,7 @@ iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT # Permit
 iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP # Descarta pacotes que não pertençam a fluxos válidos (proteção contra varreduras anômalas).
 iptables -A FORWARD -i "$EXTERNAL_IF" ! -s "$EXTERNAL_SUBNET" -m comment --comment "Anti-spoofing rede externa" -j DROP # Descarta pacotes que cheguem na interface externa com IP forjado de outra zona.
 iptables -A FORWARD -i "$LAN_IF" ! -s "$LAN_SUBNET" -m comment --comment "Anti-spoofing LAN" -j DROP # Descarta pacotes que cheguem na interface da LAN com IP forjado de outra zona.
+iptables -A FORWARD -i "$DMZ_IF" ! -s "$DMZ_SUBNET" -m comment --comment "Anti-spoofing DMZ" -j DROP # Descarta pacotes que cheguem na interface da DMZ com IP forjado de outra zona.
 
 # 2. Retorno de conexões estabelecidas (Firewall Stateful)
 iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT # Permite que os servidores da DMZ respondam às requisições legítimas feitas pelos clientes.

@@ -30,7 +30,7 @@ services:
       lan:
         ipv4_address: ${FIREWALL_LAN_IP}
       dmz:
-        ipv4_address: ${FIREWALL_DMZ_IP}    
+        ipv4_address: ${FIREWALL_DMZ_IP}
       external:
         ipv4_address: ${FIREWALL_EXTERNAL_IP}
 
@@ -41,9 +41,6 @@ services:
       - NET_ADMIN # Permite gerenciar rotas de rede para apontar o gateway
     environment:
       FIREWALL_DMZ_IP: ${FIREWALL_DMZ_IP}
-      MEDICO_IP: ${MEDICO_IP}
-      TUTOR_IP: ${TUTOR_IP}
-      DB_IP: ${DB_IP}
     networks:
       dmz:
         ipv4_address: ${WEB_IP}
@@ -149,4 +146,3 @@ networks:
 
 volumes:
   dbdata: # Volume persistente do banco de dados PostgreSQL
-      
